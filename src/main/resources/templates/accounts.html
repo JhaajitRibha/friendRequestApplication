@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notice Page</title>
+    <link rel="stylesheet" href="/css/accounts.css">
+</head>
+<body>
+<div class="container">
+    <div class="notice-box">
+        <h1>Important Notice</h1>
+        <p th:text="${message}"> Update your Friend Circle</p>
+        <button onclick="window.location.href='/rest/v1/welcome'">Go Back</button>
+    </div>
+</div>
+</body>
+</html>

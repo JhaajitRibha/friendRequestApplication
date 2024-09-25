@@ -1,0 +1,66 @@
+/* Basic Reset */
+body, h1, p {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page Background */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Notice Box */
+.notice-box {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 600px;
+}
+
+/* Heading */
+.notice-box h1 {
+    color: #f9c74f;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Paragraph */
+.notice-box p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Button */
+.notice-box button {
+    background-color: #f9c74f;
+    border: none;
+    color: #333;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.notice-box button:hover {
+    background-color: #f7b731;
+}

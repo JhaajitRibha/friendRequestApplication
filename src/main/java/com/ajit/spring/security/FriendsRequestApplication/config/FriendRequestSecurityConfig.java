@@ -30,9 +30,19 @@ public class FriendRequestSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.requiresChannel(rcc->rcc.anyRequest().requiresSecure())
                 http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests((requests) -> requests.
-               requestMatchers("/rest/v1/contacts","/rest/v1/notice","/rest/v1/welcome","/rest/v1/login","/login/**","/css/**","/error","/rest/v1/register").permitAll()
-             .requestMatchers("/rest/v1/account","/rest/v1/balance","/rest/v1/cards","/rest/v1/loans","/rest/v1/testing").authenticated());
+
+                http.authorizeHttpRequests(request->request
+                        .requestMatchers("/rest/v1/account").hasRole("ADMIN")
+                        .requestMatchers("/rest/v1/balance").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/rest/v1/cards").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/rest/v1/loans").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/rest/v1/testing").authenticated()
+                        .requestMatchers("/rest/v1/contacts","/rest/v1/notice","/rest/v1/welcome","/rest/v1/login",
+                      "/login/**",
+                       "/css/**","/error",
+                       "/rest/v1/register").permitAll());
+
+
         http.formLogin(flc->flc.
                 loginPage("/rest/v1/login")
                 .loginProcessingUrl("/login")

@@ -58,3 +58,13 @@ INSERT INTO `authorities` (`friend_id`, `name`)
 
  INSERT INTO `authorities` (`friend_id`, `name`)
    VALUES (1, 'VIEWBALANCE');
+
+
+
+ INSERT INTO `authorities` (`friend_id`, `name`)
+  VALUES (2, 'ROLE_ADMIN');
+
+ INSERT INTO `authorities` (`friend_id`, `name`)
+  VALUES (2, 'ROLE_USER');
+
+

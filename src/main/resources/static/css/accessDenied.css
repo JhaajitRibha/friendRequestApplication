@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8d7da;
+    color: #721c24;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.denied-container {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #f5c6cb;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    color: #dc3545;
+}
+
+.error-details p {
+    margin: 10px 0;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+}

@@ -1,7 +1,12 @@
 package com.ajit.spring.security.FriendsRequestApplication.config;
 
+import com.ajit.spring.security.FriendsRequestApplication.exceptionHandler.CustomAccessDeniedHandler;
+import com.ajit.spring.security.FriendsRequestApplication.exceptionHandler.CustomBasicAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,13 +20,18 @@ import javax.sql.DataSource;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@RequiredArgsConstructor
 public class FriendRequestSecurityConfig {
+
+
+
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
+//        http.requiresChannel(rcc->rcc.anyRequest().requiresSecure())
+                http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests) -> requests.
-               requestMatchers("/rest/v1/notice","/rest/v1/welcome","/css/**","/error","/rest/v1/register").permitAll()
-             .requestMatchers("/rest/v1/account","/rest/v1/balance","/rest/v1/cards","/rest/v1/contacts","/rest/v1/loans").authenticated());
+               requestMatchers("/rest/v1/notice","/rest/v1/welcome","/rest/v1/login","/css/**","/error","/rest/v1/register").permitAll()
+             .requestMatchers("/rest/v1/account","/rest/v1/balance","/rest/v1/cards","/rest/v1/contacts","/rest/v1/loans","/rest/v1/testing").authenticated());
         http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
         return http.build();

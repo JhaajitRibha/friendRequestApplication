@@ -11,19 +11,84 @@ body {
     padding: 20px;
 }
 
+.top-right {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.username-container {
+    display: inline-block;
+    position: relative; /* Required for tooltip positioning */
+}
+
+.username {
+    display: inline-block; /* Make username behave like a block for height consistency */
+    padding: 10px 15px; /* Add padding for height and width */
+    background-color: #5a5a5a; /* Background color for username */
+    color: white; /* Text color for username */
+    border-radius: 5px; /* Rounded corners */
+    margin-right: 10px; /* Space between username and logout button */
+    cursor: pointer; /* Pointer cursor for better UX */
+    transition: background-color 0.3s; /* Smooth background color change */
+}
+
+.username:hover {
+    background-color: #444; /* Darker shade on hover */
+}
+
+.roles-tooltip {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Position below the username */
+    left: 50%;
+    transform: translateX(-50%); /* Center the tooltip */
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for the tooltip */
+    color: black; /* Text color for tooltip */
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Ensure it appears above other elements */
+    font-size: 10px; /* Small font size for roles */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.username-container:hover .roles-tooltip {
+    display: block; /* Show tooltip on hover */
+}
+
+.logout-btn, .login-btn {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.logout-btn {
+    background-color: #c0392b; /* Red color for logout button */
+}
+
+.logout-btn:hover {
+    background-color: grey; /* Change on hover */
+}
+
+.login-btn {
+    background-color: #28a745; /* Green color for login button */
+}
+
+.login-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
 .content-container {
     background-color: #d3d3d3;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    font: purple;
 }
 
 .navbar-container {
     margin-top: 20px;
-    background-color: #333; /* Dark grey */
-    padding: 10px;
-    border-radius: 8px;
 }
 
 .navbar {
@@ -42,23 +107,4 @@ body {
 
 .navbar a:hover {
     background-color: #0056b3;
-}
-
-
-.top-right {
-    text-align: right;
-    margin-bottom: 20px;
-}
-
-.login-btn {
-    text-decoration: none;
-    color: #fff;
-    background-color: #0056b3;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.login-btn:hover {
-    background-color: grey;
 }

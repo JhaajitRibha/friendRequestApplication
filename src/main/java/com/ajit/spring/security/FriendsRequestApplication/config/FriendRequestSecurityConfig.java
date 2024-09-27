@@ -20,20 +20,34 @@ import javax.sql.DataSource;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@RequiredArgsConstructor
 public class FriendRequestSecurityConfig {
 
 
+    @Autowired
+    private  FriendRequestUsernamePasswordAuthenticationProvider customAuthProvider;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.requiresChannel(rcc->rcc.anyRequest().requiresSecure())
                 http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests) -> requests.
-               requestMatchers("/rest/v1/notice","/rest/v1/welcome","/rest/v1/login","/css/**","/error","/rest/v1/register").permitAll()
-             .requestMatchers("/rest/v1/account","/rest/v1/balance","/rest/v1/cards","/rest/v1/contacts","/rest/v1/loans","/rest/v1/testing").authenticated());
-        http.formLogin(withDefaults());
+               requestMatchers("/rest/v1/contacts","/rest/v1/notice","/rest/v1/welcome","/rest/v1/login","/login/**","/css/**","/error","/rest/v1/register").permitAll()
+             .requestMatchers("/rest/v1/account","/rest/v1/balance","/rest/v1/cards","/rest/v1/loans","/rest/v1/testing").authenticated());
+        http.formLogin(flc->flc.
+                loginPage("/rest/v1/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/rest/v1/welcome",true)
+                .failureUrl("/login?error=true")
+                .permitAll()    );
+
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/rest/v1/welcome")
+                .permitAll());
+
         http.httpBasic(withDefaults());
+
+        http.authenticationProvider(customAuthProvider);
         return http.build();
     }
 

@@ -11,6 +11,13 @@
 
     <div class="top-right">
         <a th:href="@{/rest/v1/login}" sec:authorize="isAnonymous()" class="login-btn">Login</a>
+
+        <div class="username-container" sec:authorize="isAuthenticated()">
+            <span class="username" sec:authentication="name"></span>
+            <span class="roles-tooltip" sec:authentication="authorities">({{#this}})</span>
+        </div>
+
+        <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="logout-btn">Logout</a>
     </div>
 
     <div class="content-container">
@@ -18,13 +25,12 @@
         <p>We are glad to have you here.</p>
     </div>
 
-
     <div class="navbar-container">
         <div class="navbar">
-            <a th:href="@{/rest/v1/account}" sec:authorize="isAnonymous()">Accounts</a>
+            <a th:href="@{/rest/v1/account}" sec:authorize="isAuthenticated()">Accounts</a>
             <a th:href="@{/rest/v1/balance}" sec:authorize="isAuthenticated()">Balance</a>
             <a th:href="@{/rest/v1/cards}" sec:authorize="isAuthenticated()">Cards</a>
-            <a th:href="@{/rest/v1/contacts}" sec:authorize="isAuthenticated()">Contact</a>
+            <a th:href="@{/rest/v1/contacts}" sec:authorize="isAnonymous()">Contact</a>
             <a th:href="@{/rest/v1/loans}" sec:authorize="isAuthenticated()">Loans</a>
             <a th:href="@{/rest/v1/notice}" sec:authorize="isAnonymous()">Notice</a>
         </div>

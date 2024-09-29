@@ -5,12 +5,15 @@ import com.ajit.spring.security.FriendsRequestApplication.exceptionHandler.Custo
 import com.ajit.spring.security.FriendsRequestApplication.filter.JWTTokenGenerationFilter;
 import com.ajit.spring.security.FriendsRequestApplication.filter.JWTTokenValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +31,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import javax.sql.DataSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -40,20 +44,22 @@ public class FriendRequestSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-//        http.requiresChannel(rcc->rcc.anyRequest().requiresSecure())
-                http.csrf(AbstractHttpConfigurer::disable);
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-        http.sessionManagement(sessionConfig->sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        http.sessionManagement(sessionConfig->sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)) -  for ui , and need to learn jwt concept for ui and implement.
-                                .cors(corsConfig->corsConfig.configurationSource(new CorsConfigurationSource() {
-                                    @Override
-                                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                                        CorsConfiguration config = new CorsConfiguration();
-                                        config.setExposedHeaders(Arrays.asList("Authorization"));
-                                        return config;
-                                    }
-                                }))
-                .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler))
+        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
+                        config.setAllowedMethods(Collections.singletonList("*"));
+                        config.setAllowCredentials(true);
+                        config.setAllowedHeaders(Collections.singletonList("*"));
+                        config.setExposedHeaders(Arrays.asList("Authorization"));
+                        config.setMaxAge(3600L);
+                        return config;
+                    }
+                }))
+                .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler).ignoringRequestMatchers( "/rest/v1/register", "/rest/v1/apiLogin"))
                         .addFilterAfter(new JWTTokenGenerationFilter(), BasicAuthenticationFilter.class)
                                 .addFilterAfter(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class);
 
@@ -67,20 +73,11 @@ public class FriendRequestSecurityConfig {
                         .requestMatchers("/rest/v1/contacts","/rest/v1/notice","/rest/v1/welcome","/rest/v1/login",
                       "/login/**",
                        "/css/**","/error",
-                       "/rest/v1/register").permitAll());
+                       "/rest/v1/register","/rest/v1/apiLogin","/rest/v1/user").permitAll());
 
 
-        http.formLogin(flc->flc.
-                loginPage("/rest/v1/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/rest/v1/welcome",true)
-                .failureUrl("/login?error=true")
-                .permitAll()    );
+        http.formLogin(withDefaults() );
 
-        http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/rest/v1/welcome")
-                .permitAll());
 
         http.httpBasic(withDefaults());
 
@@ -110,6 +107,15 @@ public class FriendRequestSecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+
+        FriendRequestUsernamePasswordAuthenticationProvider friendRequestUsernamePasswordAuthenticationProvider =
+                new FriendRequestUsernamePasswordAuthenticationProvider((FriendsRequestUserDetailsService) userDetailsService,passwordEncoder);
+        ProviderManager providerManager = new ProviderManager(friendRequestUsernamePasswordAuthenticationProvider);
+        providerManager.setEraseCredentialsAfterAuthentication(false);
+        return providerManager;
+    }
 
 }
 

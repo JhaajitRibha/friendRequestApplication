@@ -46,6 +46,6 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/rest/v1/welcome");
+        return request.getServletPath().equals("/rest/v1/user");
     }
 }

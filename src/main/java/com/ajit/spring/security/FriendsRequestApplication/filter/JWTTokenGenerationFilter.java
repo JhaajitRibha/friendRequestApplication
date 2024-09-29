@@ -44,6 +44,6 @@ public class JWTTokenGenerationFilter extends OncePerRequestFilter {
     }
 
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getServletPath().equals("/rest/v1/welcome");
+        return !request.getServletPath().equals("/rest/v1/user");
     }
 }

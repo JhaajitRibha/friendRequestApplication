@@ -67,7 +67,7 @@ public class FriendRequestSecurityConfig {
                         .requestMatchers("/rest/v1/contacts","/rest/v1/notice","/rest/v1/welcome","/rest/v1/login",
                       "/login/**",
                        "/css/**","/error",
-                       "/rest/v1/register").permitAll());
+                       "/rest/v1/register","rest/v1/dd").permitAll());
 
 
         http.formLogin(flc->flc.
